@@ -1,4 +1,4 @@
--- 1. OSNOVNA PODEŠAVANJA (Options)
+-- 2. OSNOVNA PODEŠAVANJA (Options)
 vim.g.mapleader = " "
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -213,7 +213,7 @@ require("lazy").setup({
     opts = {
       -- Onemogući poruke u komandnoj liniji (dole)
       -- Noice će automatski presresti ostalo
-      disable_mouse = true,
+      disable_mouse = false,
       hint = true,
       max_count = 2,
       max_time = 1000,
@@ -264,7 +264,43 @@ require("lazy").setup({
     end,
   },
 
+    -- Git znaci (plus, minus, promene)
+  {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require('gitsigns').setup({
+        -- Prikazuj blame pored trenutne linije (ghost text)
+        current_line_blame = true, 
+        current_line_blame_opts = {
+          virt_text = true,
+          virt_text_pos = 'eol', -- Kraj linije (end of line)
+          delay = 1000,          -- Sačekaj 1 sekundu pre nego što prikažeš
+          ignore_whitespace = false,
+        },
+        current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+      })
+    end
+  },
 
+    -- Git Blame plugin (stalni tekst)
+  {
+    "f-person/git-blame.nvim",
+    -- Učitava se čim otvoriš fajl
+    event = "VeryLazy",
+    opts = {
+      enabled = true,
+      message_template = "    <author> • <date> • <summary>",
+      date_format = "%r", -- npr. "2 days ago"
+      virtual_text_column = 80, -- Počni ispis od 80-te kolone (opciono)
+    },
+  },
+
+    -- Za kompletan pregled izmena (Diff) u celom projektu
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+    config = true
+  },
 })
 
 -- 4. PREČICE (Keymaps)
@@ -274,3 +310,24 @@ keymap('n', '<leader>ff', ':Telescope find_files<CR>')
 keymap('n', 'gd', vim.lsp.buf.definition)
 keymap('n', 'K', vim.lsp.buf.hover)
 keymap('n', '<leader>ca', vim.lsp.buf.code_action)
+
+local gs = require('gitsigns')
+
+-- 1. Pogledaj samo taj "hunk" (blok izmena) u malom prozoru
+vim.keymap.set('n', '<leader>hp', gs.preview_hunk)
+
+-- 2. Pogledaj celu verziju fajla pre izmena (Diff u splitu)
+vim.keymap.set('n', '<leader>gd', gs.diffthis)
+
+-- 3. Toggle za brisanje (Prikaži obrisane linije direktno u kodu)
+vim.keymap.set('n', '<leader>td', gs.toggle_deleted)
+
+
+local keymap = vim.keymap.set
+
+-- Otvori/zatvori kompletan pregled izmena
+keymap('n', '<leader>gv', ':DiffviewOpen<CR>', { desc = "Git View (Diff)" })
+keymap('n', '<leader>gx', ':DiffviewClose<CR>', { desc = "Close Git View" })
+
+-- Pogledaj istoriju samo trenutnog fajla
+keymap('n', '<leader>gh', ':DiffviewFileHistory %<CR>', { desc = "Git File History" })
