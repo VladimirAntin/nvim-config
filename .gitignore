@@ -1,0 +1,7 @@
+# Ignoriši pluginove koje Lazy skida (oni se uvek ponovo skinu)
+/lazy-lock.json
+/lazy/
+
+# Ignoriši privremene Neovim fajlove
+*.swp
+undo/
