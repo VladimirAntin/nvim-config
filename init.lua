@@ -207,6 +207,63 @@ require("lazy").setup({
     end
   },
 
+  {
+    "m4xshen/hardtime.nvim",
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    opts = {
+      -- Onemogući poruke u komandnoj liniji (dole)
+      -- Noice će automatski presresti ostalo
+      disable_mouse = true,
+      hint = true,
+      max_count = 2,
+      max_time = 1000,
+    }
+  },
+
+  -- 1. Sistem za obaveštenja (Notifikacije)
+  {
+    "rcarriga/nvim-notify",
+    config = function()
+      require("notify").setup({
+        stages = "fade", -- Animacija (može i "slide", "static")
+        timeout = 3000,  -- Koliko dugo stoji prozor (3 sekunde)
+        background_colour = "#000000",
+        render = "minimal", -- Izgled prozorčića
+      })
+      -- Postavi notify kao podrazumevani sistem za poruke
+      vim.notify = require("notify")
+    end
+  },
+
+  -- 2. Noice.nvim (On spaja hardtime poruke sa notifikacijama)
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+    config = function()
+      require("noice").setup({
+        lsp = {
+          -- preusmerava LSP poruke u notifikacije
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        presets = {
+          bottom_search = true,         -- CMD linija dole
+          command_palette = true,      -- Sredina ekrana za komande
+          long_message_to_split = true, -- Velike poruke idu u split
+          inc_rename = false,          -- Ako koristiš inc-rename
+          lsp_doc_border = false,      -- Okvir oko dokumentacije
+        },
+      })
+    end,
+  },
+
 
 })
 
