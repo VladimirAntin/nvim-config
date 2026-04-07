@@ -4,9 +4,14 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = 'a'
 vim.opt.termguicolors = true
-vim.opt.shiftwidth = 4
-vim.opt.tabstop = 4
 vim.opt.cursorline = true
+
+-- 1. OSNOVNA PODEŠAVANJA (Options)
+vim.opt.shiftwidth = 2   -- Broj razmaka za automatsku indentaciju
+vim.opt.tabstop = 2      -- Broj razmaka koje TAB karakter predstavlja
+vim.opt.softtabstop = 2  -- Broj razmaka koje TAB unosi dok kucaš
+vim.opt.expandtab = true -- Pretvara svaki TAB u razmake (spaces)
+
 
 -- CLIPBOARD (Sistemski clipboard za macOS)
 vim.opt.clipboard = "unnamedplus"
@@ -25,6 +30,20 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
+
+
+-- Vizuelno podešavanje za neiskorišćeni kod (Diagnostics)
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '●', -- Tačkica ispred poruke
+  },
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+})
+
+-- Promeni boju neiskorišćenih varijabli da budu "izbledele"
+vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "Comment", italic = true })
 
 -- 3. PLUGINI
 require("lazy").setup({
@@ -94,7 +113,7 @@ require("lazy").setup({
                 end,
               })
             end
-          end,
+         end,
         })
       end
     end
