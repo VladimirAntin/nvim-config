@@ -190,6 +190,24 @@ require("lazy").setup({
 
   -- ZAGRADE
   { "windwp/nvim-autopairs", config = true },
+
+  -- Terminal koji se lako pali/gasi
+  {
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    config = function()
+      require("toggleterm").setup({
+        size = 20,
+        open_mapping = [[<c-\>]], -- Prečica Ctrl + \ za paljenje/gašenje
+        hide_numbers = true,
+        shade_terminals = true,
+        direction = 'horizontal', -- Može biti 'horizontal', 'vertical', 'float'
+        close_on_exit = true,
+      })
+    end
+  },
+
+
 })
 
 -- 4. PREČICE (Keymaps)
