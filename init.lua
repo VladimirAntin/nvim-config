@@ -307,6 +307,13 @@ require("lazy").setup({
 local keymap = vim.keymap.set
 keymap('n', '<leader>e', ':NvimTreeToggle<CR>')
 keymap('n', '<leader>ff', ':Telescope find_files<CR>')
+
+local builtin = require('telescope.builtin')
+
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = "Telescope Live Grep" })
+vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = "Telescope Search Word" })
+vim.keymap.set('n', '<leader>fz', builtin.current_buffer_fuzzy_find, { desc = "Telescope Buffer Search" })
+
 keymap('n', 'gd', vim.lsp.buf.definition)
 keymap('n', 'K', vim.lsp.buf.hover)
 keymap('n', '<leader>ca', vim.lsp.buf.code_action)
@@ -331,3 +338,17 @@ keymap('n', '<leader>gx', ':DiffviewClose<CR>', { desc = "Close Git View" })
 
 -- Pogledaj istoriju samo trenutnog fajla
 keymap('n', '<leader>gh', ':DiffviewFileHistory %<CR>', { desc = "Git File History" })
+
+
+local keymap = vim.keymap.set
+
+-- Tabovi: Otvaranje i zatvaranje
+keymap("n", "<leader>tn", ":tabnew<CR>", { desc = "Novi tab" })
+keymap("n", "<leader>tc", ":tabclose<CR>", { desc = "Zatvori tab" })
+
+-- Tabovi: Brza navigacija (Shift + L/H)
+-- Ovo je najbrži način: Shift+L ide desno, Shift+H ide levo kroz tabove
+keymap("n", "L", ":tabnext<CR>", { desc = "Sledeći tab" })
+keymap("n", "H", ":tabprev<CR>", { desc = "Prethodni tab" })
+
+
